@@ -1,0 +1,125 @@
+/* floating things: butterflies, stars, sparkles, falling flowers, little clouds */
+#app{position:relative;z-index:1}
+.fxlayer{position:fixed;inset:0;pointer-events:none;overflow:hidden;transition:opacity .7s ease}
+.fxlayer.off{opacity:0}
+.fx-back{z-index:0}
+.fx-front{z-index:12}
+.fx-panel{z-index:2}
+.fx{position:absolute;will-change:transform}
+.fxs{display:block;background-image:url(../fx/atlas.webp);background-repeat:no-repeat}
+.fx-fly{animation:flyup var(--d) linear infinite}
+.fx-fall{animation:fall var(--d) linear infinite}
+.wx{animation:wig var(--dw) ease-in-out infinite alternate}
+.flap{animation:flap .26s ease-in-out infinite alternate}
+.spin{animation:fxspin var(--ds,20s) linear infinite}
+.fx-twk{animation:twk var(--d) ease-in-out infinite alternate}
+.fx-cloud{opacity:.42;animation:cdrift var(--d) linear infinite}
+body.fxpause .fx,body.fxpause .wx,body.fxpause .fxs{animation-play-state:paused}
+@keyframes flyup{from{transform:translate3d(0,108vh,0)}to{transform:translate3d(var(--sx),-22vh,0)}}
+@keyframes fall{from{transform:translate3d(0,-14vh,0)}to{transform:translate3d(var(--sx),112vh,0)}}
+@keyframes wig{from{transform:translateX(calc(var(--wx) * -1)) rotate(-8deg)}to{transform:translateX(var(--wx)) rotate(8deg)}}
+@keyframes flap{to{transform:scaleX(.45)}}
+@keyframes fxspin{to{transform:rotate(360deg)}}
+@keyframes twk{from{opacity:.2;transform:scale(.7) rotate(-10deg)}to{opacity:1;transform:scale(1.12) rotate(10deg)}}
+@keyframes cdrift{from{transform:translateX(-30vw)}to{transform:translateX(130vw)}}
+.panel .pbox{position:relative;z-index:1}
+
+/* moon behind the cabinet, with her day written around it */
+.cab{z-index:1}
+.moonbg{position:absolute;left:27%;top:0;width:56%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:0}
+.moonimg{position:absolute;left:15.5%;top:15.5%;width:69%;height:auto;display:block;animation:moonfloat 7s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(255,248,220,.9))}
+.moonring{position:absolute;inset:0;width:100%;height:100%;overflow:visible;animation:ringturn 160s linear infinite}
+.moonring text{font-family:Fraunces,Georgia,'Times New Roman',serif;font-style:italic;font-size:17.5px;font-weight:700;fill:#fff4cf;paint-order:stroke;stroke:rgba(38,6,56,.6);stroke-width:2.6px;stroke-linejoin:round}
+.moonring .wt{opacity:0;animation:wboil .54s linear infinite;animation-delay:calc(var(--i) * -.18s)}
+@keyframes wboil{0%,32%{opacity:1}33%,100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.moonring .wt{animation:none;opacity:1}.moonring .wt+.wt{display:none}}
+@keyframes moonfloat{50%{transform:translateY(-5px)}}
+@keyframes ringturn{to{transform:rotate(360deg)}}
+
+/* magical cloud fog over the four closed parts */
+.fog{position:absolute;pointer-events:none;z-index:2}
+.fc{position:absolute;display:block;height:auto;transform:translate(-50%,-50%);animation:cbob var(--d) ease-in-out infinite alternate;will-change:transform;filter:drop-shadow(0 3px 5px rgba(70,50,100,.3))}
+@keyframes cbob{from{transform:translate(-50%,-50%)}to{transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by)))}}
+.fog.lift .fc{animation:none;transition:transform 2.3s cubic-bezier(.5,0,.8,.5),opacity 2.1s ease-in;transform:translate(calc(-50% + var(--lx)),calc(-50% + var(--ly))) scale(1.35);opacity:0}
+
+/* popups */
+.fxov{display:grid;place-items:center;padding:12px}
+.stage{position:relative}
+.lstage,.sstage{width:min(88vw,440px);height:min(78dvh,640px)}
+.fpage{position:absolute;inset:0;display:flex;flex-direction:column;padding:22px 20px 14px;background:#fffdf7;background-image:repeating-linear-gradient(#fffdf7 0 31px,rgba(110,59,29,.1) 31px 32px);border:2.5px solid rgba(110,59,29,.35);border-radius:10px 14px 11px 13px;box-shadow:0 16px 36px rgba(0,0,0,.4);z-index:2}
+.fpage .ptxt{flex:1;min-height:0;overflow:auto;padding-right:4px}
+.fpage .pbtn{align-self:center;margin-top:12px;flex:none}
+.bl{position:absolute;left:50%;top:50%;width:min(80vw,330px);height:auto;pointer-events:none;z-index:1;transform:translate(-50%,-50%)}
+.bl-l{clip-path:inset(0 0 50% 0)}
+.bl-r{clip-path:inset(50% 0 0 0)}
+.pcol{display:flex;flex-direction:column;align-items:center;gap:16px}
+.pstage{width:min(78vw,340px)}
+.scroll{display:block;width:100%;height:auto}
+.stxt{position:absolute;left:17%;right:17%;top:15%;bottom:13%;display:flex;overflow:auto}
+.sin{margin:auto;text-align:center;font:italic 500 1.05rem/1.7 var(--font-display);color:var(--ink)}
+.sin h3{font-size:1.25rem;margin:0 0 8px}
+.sin p{margin:0 0 .5em}
+.bunny{position:absolute;width:44%;height:auto;pointer-events:none;z-index:3}
+.b1{left:-17%;top:-9%}
+.b2{right:-17%;bottom:-6%}
+.cn{position:absolute;width:34%;height:auto;pointer-events:none;z-index:3}
+.cn-tl{left:0;top:0}
+.cn-br{right:0;bottom:0}
+.sun{position:absolute;width:30%;left:-9%;top:-8%;z-index:4;pointer-events:none}
+.mn{position:absolute;width:24%;right:-7%;bottom:-5%;z-index:4;pointer-events:none}
+.spage{padding:136px 34px 112px;border-radius:3px}
+.spage .pbtn{margin-top:10px}
+
+/* vintage paper: yellowed fibres, stains, darker burnt edges, faint ruling */
+.fpage.fpage,.paper.paper{background-color:#f1e0b4;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .1 0 0 0 .55 -.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(ellipse 45% 30% at 18% 14%,rgba(176,120,50,.22),transparent 70%),radial-gradient(ellipse 40% 28% at 84% 86%,rgba(140,88,36,.26),transparent 70%),radial-gradient(ellipse 22% 14% at 70% 30%,rgba(160,105,45,.14),transparent 70%),repeating-linear-gradient(transparent 0 31px,rgba(110,59,29,.13) 31px 32px);box-shadow:inset 0 0 46px rgba(120,72,28,.42),inset 0 0 6px rgba(90,52,20,.35),0 16px 36px rgba(0,0,0,.4)}
+.paper.paper{box-shadow:inset 0 0 40px rgba(120,72,28,.4),6px 8px 0 rgba(110,59,29,.3)}
+
+.lstage{width:min(76vw,320px)}
+
+/* clouds leaving their drawers: a little puff, then each one drifts up and away, staggered */
+.fog.lift .fc{animation:cloudaway 2.8s cubic-bezier(.45,0,.55,1) both;transition:none}
+.fog.lift .fc:nth-child(2n){animation-delay:.14s}.fog.lift .fc:nth-child(3n){animation-delay:.28s}.fog.lift .fc:nth-child(4n){animation-delay:.42s}.fog.lift .fc:nth-child(5n){animation-delay:.2s}
+@keyframes cloudaway{0%{transform:translate(-50%,-50%) scale(1);opacity:1}18%{transform:translate(-50%,calc(-50% + 2%)) scale(1.1);opacity:1}100%{transform:translate(calc(-50% + var(--lx)),calc(-50% + var(--ly) - 45%)) scale(1.6) rotate(10deg);opacity:0}}
+/* vintage paper: darkened corners, foxing spots, curled corner */
+.paper.paper{isolation:isolate}
+.fpage.fpage,.paper.paper{border:2.5px solid rgba(95,58,26,.5);border-radius:5px 11px 6px 12px/10px 5px 11px 6px;box-shadow:inset 0 0 60px rgba(115,66,24,.5),inset 0 0 10px rgba(80,44,16,.5),0 16px 36px rgba(0,0,0,.4)}
+.paper.paper{box-shadow:inset 0 0 56px rgba(115,66,24,.48),inset 0 0 10px rgba(80,44,16,.5),6px 8px 0 rgba(110,59,29,.3)}
+.fpage::before,.paper::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background:radial-gradient(circle at 0 0,rgba(105,58,20,.45),transparent 80px),radial-gradient(circle at 100% 0,rgba(105,58,20,.36),transparent 70px),radial-gradient(circle at 0 100%,rgba(105,58,20,.36),transparent 70px),radial-gradient(circle at 100% 100%,rgba(105,58,20,.5),transparent 90px),radial-gradient(circle,rgba(120,70,25,.3) 1px,transparent 1.7px) 13px 21px/47px 53px,radial-gradient(circle,rgba(120,70,25,.2) 1.5px,transparent 2.2px) 31px 9px/71px 67px}
+.fpage::after,.paper::after{content:"";position:absolute;right:0;bottom:0;width:30px;height:30px;pointer-events:none;border-bottom-right-radius:inherit;background:linear-gradient(135deg,rgba(80,44,16,.28),transparent 45%) ,linear-gradient(315deg,transparent 50%,#e9d6a4 50%);box-shadow:-3px -3px 6px rgba(70,38,12,.3)}
+
+/* night-sky page: light text straight on the background (paper popups, rooms and the music panel keep their own dark ink) */
+.sec{color:#fff1f8}
+.sec .sub,.sec .cap{opacity:1}
+.sec .note{color:#ffb9a6}
+.cabcap,.music .cap{text-shadow:0 1px 8px rgba(30,4,46,.85)}
+.tally{color:#f8cfe4;text-shadow:0 1px 8px rgba(30,4,46,.85)}
+.music .disc .t{color:#fff1f8;text-shadow:0 1px 6px rgba(30,4,46,.9)}
+.music .link{color:#fff1f8}
+
+/* baby Mimi, asleep in her bed, with her guardian angel hovering over her. They stay beside the cabinet and just float in place.
+   js/fx.js hides them (mascot()) while a room, popup or the music panel is open. */
+.mascots{position:absolute;left:calc(100% + 10px);top:calc(min(26vw,100px) + 16%);width:var(--mw,220px);pointer-events:none;z-index:2;transition:opacity .7s ease}
+.mascots.off{opacity:0}
+.mascots.over{left:auto;right:-3%;top:calc(min(26vw,100px) - 76px)}
+.mmi{position:relative;will-change:transform;animation:mimifloat 6.4s ease-in-out infinite}
+.mimi-img{display:block;width:100%;height:auto;filter:drop-shadow(0 8px 14px rgba(25,4,40,.55))}
+.mang{position:absolute;left:41%;bottom:90%;width:50%;will-change:transform;animation:angelguard 5.2s ease-in-out infinite}
+.mang img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 12px rgba(255,238,200,.75))}
+body.fxpause .mmi,body.fxpause .mang{animation-play-state:paused}
+@keyframes mimifloat{0%,100%{transform:translateY(0) rotate(-1.2deg)}50%{transform:translateY(-13px) rotate(1.2deg)}}
+@keyframes angelguard{0%,100%{transform:translate(0,0) rotate(-3deg)}33%{transform:translate(5px,-9px) rotate(1deg)}66%{transform:translate(-4px,-4px) rotate(3deg)}}
+
+/* readability: darker + softly blurred layer over the purple background (behind everything, clouds stay crisp above it) */
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 40%,rgba(18,4,30,.38),rgba(14,2,24,.62));-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+/* clear text on the dark layer */
+.cabcap,.tally{color:#fff6dc;text-shadow:0 1px 3px rgba(12,2,22,.95),0 0 10px rgba(12,2,22,.8)}
+.cabsec .hint,.cabsec .note{text-shadow:0 1px 3px rgba(12,2,22,.95)}
+.cabsec .hint{color:#f0e2c8}
+.cabsec .note{color:#ffb39e}
+/* glowing outlines on the cabinet and items (not the clouds) */
+.cabimg{filter:drop-shadow(0 0 2px rgba(255,236,170,.95)) drop-shadow(0 0 12px rgba(255,214,120,.65))}
+.mascots img{filter:drop-shadow(0 0 2px rgba(255,236,170,.95)) drop-shadow(0 0 9px rgba(255,214,120,.6))}
+.keybadge,.cabsec .pill{box-shadow:inset 0 2px 0 rgba(255,238,200,.65),0 3px 0 #8a5a32,0 0 12px 2px rgba(255,214,120,.7)}
+.moonring text{stroke:rgba(14,2,24,.9);stroke-width:3.4px}
+/* moon a bit further left, away from the cabinet */
+.moonbg{left:10%}
