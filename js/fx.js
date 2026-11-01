@@ -34,7 +34,7 @@ window.addEventListener('visibilitychange',function(){document.body.classList.to
 return{
  init:function(){
   if(RM||!A)return;
-  mkLayer('fx-back',{cloud:2,star:6,tinystar:5});
+  mkLayer('fx-back',{star:6,tinystar:5});
   mkLayer('fx-front',{butterfly:5,flower:2,sparkle:3})},
  /* hide the layers while a room or popup is open; every hold() must be released once */
  hold:function(){
