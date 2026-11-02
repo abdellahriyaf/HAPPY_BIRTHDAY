@@ -31,10 +31,11 @@ window.Sections.game={mount:async function(host,ctx){
  var ang=el('div','gang','<img src="'+S('angel1')+'" alt="">'),fig=el('div','gang','<img alt="">');fig.style.display='none';
  world.appendChild(gg);world.appendChild(ang);world.appendChild(fig);
  var i=+((/[?&]cloud=(\d+)/.exec(location.search)||[0,0])[1])||0;i=Math.min(i,N-1);
+ function F(n){return .7+.57*n/N}var fac=F(i);
  function cam(n){world.style.transform='translateY('+(n*step)+'px)';root.style.setProperty('--p',n/N);count.textContent=n+' / '+N}
- function pose(n,idle){gs.src=S(n);gs.style.height=GH[n.replace('girl_','')]+'px';bun.style.display=idle?'none':''}
+ function pose(n,idle){gs.src=S(n);gs.style.height=(GH[n.replace('girl_','')]*fac)+'px';bun.style.display=idle?'none':''}
  function card(h){var c=el('div','gcard',h);ui.innerHTML='';ui.appendChild(c);return c}
- var a0=P(i);put(gg,a0.x,a0.y);put(ang,a0.x+70,a0.y-190);cam(i);
+ var a0=P(i);pose('girl_stand');put(gg,a0.x,a0.y);put(ang,a0.x+70,a0.y-190);cam(i);
  function say(t){var o=count.textContent;count.textContent=t;setTimeout(function(){count.textContent=o},2600)}
 
  function dodge(nb,yb,px,py){
@@ -76,7 +77,7 @@ window.Sections.game={mount:async function(host,ctx){
 
  async function jump(to,slip){
   var a=P(i),b=P(to),dir=b.x<a.x?-1:1,x1=a.x+(b.x-a.x)*.2;
-  if(to===N)moon.style.opacity=1;gg.classList.toggle('fl',dir<0);pose('girl_run');bun.classList.add('hop');cam(to);
+  fac=F(to);if(to===N)moon.style.opacity=1;gg.classList.toggle('fl',dir<0);pose('girl_run');bun.classList.add('hop');cam(to);
   await go(gg,[[x1,a.y]],200,'ease-in');pose('girl_jump');
   if(!slip){await go(gg,[[(x1+b.x)/2,Math.min(a.y,b.y)-110],[b.x,b.y]],650)}
   else{

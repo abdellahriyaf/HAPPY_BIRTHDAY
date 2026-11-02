@@ -6,7 +6,7 @@
 .gcl{position:absolute;width:170px;height:auto;pointer-events:none}
 .gg{position:absolute;left:0;top:0;width:0;height:0;will-change:transform}
 .gg img{position:absolute;bottom:0;left:0;translate:-50% 0;max-width:none}
-.gg .gb{height:44px;left:-50px;translate:-50% 0}.gg.fl .gb{left:50px}.gg .gs{height:150px}.gg.fl .gs{scale:-1 1}
+.gg .gb{height:44px;left:-50px;translate:-50% 0}.gg.fl .gb{left:50px}.gg .gs{height:105px;transition:height .8s ease}.gg.fl .gs{scale:-1 1}
 .gb.hop{animation:hop .5s ease 2}@keyframes hop{50%{transform:translateY(-16px)}}
 .gang{position:absolute;left:0;top:0;width:0;height:0;will-change:transform}
 .gang img{position:absolute;bottom:0;left:0;translate:-50% 0;height:78px;animation:bob 2.4s ease-in-out infinite}
