@@ -24,9 +24,9 @@ window.Sections.game={mount:async function(host,ctx){
  var root=el('div','gm','<div class="gsky"></div><div class="gcount"></div><div class="gworld"></div><div class="gui"></div><div class="gtap">Tap to jump</div>');
  document.body.appendChild(root);
  var W=root.clientWidth,H=root.clientHeight,step=Math.min(150,H*.2),world=root.querySelector('.gworld'),ui=root.querySelector('.gui'),count=root.querySelector('.gcount'),hint=root.querySelector('.gtap');
- function P(k){return{x:k===N?W/2-75:W*(k===0?.4:k%2?.7:.3),y:-k*step}}
+ function P(k){return{x:k===N?W/2+75:W*(k===0?.4:k%2?.7:.3),y:-k*step}}
  for(var k=0;k<N;k++){var p=P(k),c=el('img','gcl');c.src='fx/cloud'+(k%4+1)+'.webp';c.alt='';c.style.left=(p.x-85)+'px';c.style.top=(p.y-26)+'px';world.appendChild(c)}
- var mp=P(N),moon=el('img','gmoon');moon.src='fx/moon.webp';moon.alt='';moon.style.left=(W/2-180)+'px';moon.style.top=(mp.y-16)+'px';world.appendChild(moon);
+ var mp=P(N),moon=el('img','gmoon');moon.src='fx/moon.webp';moon.alt='';moon.style.width='560px';moon.style.left=(W/2-305)+'px';moon.style.top=(mp.y-10)+'px';world.appendChild(moon);
  var gg=el('div','gg','<img class="gb" src="'+S('bunny')+'" alt=""><img class="gs" src="'+S('girl_stand')+'" alt="">'),gs=gg.querySelector('.gs'),bun=gg.querySelector('.gb');
  var ang=el('div','gang','<img src="'+S('angel1')+'" alt="">'),fig=el('div','gang','<img alt="">');fig.style.display='none';
  world.appendChild(gg);world.appendChild(ang);world.appendChild(fig);
@@ -60,7 +60,10 @@ window.Sections.game={mount:async function(host,ctx){
   async function hit(){if(used)return;used=true;tr.classList.add('fast');val.textContent='100%';
    for(var s of ['250%','900%','99999%','∞']){await wait(260);val.textContent=s}
    tr.classList.add('broke');nt.textContent=broke;nx.disabled=false}
-  tr.addEventListener('pointerdown',hit);tr.addEventListener('pointermove',hit);tr.addEventListener('keydown',hit);
+  var sx=null,kn=c.querySelector('.gknob');
+  tr.addEventListener('pointerdown',function(e){if(used)return;sx=e.clientX;try{tr.setPointerCapture(e.pointerId)}catch(_){}});
+  tr.addEventListener('pointermove',function(e){if(used||sx===null)return;var r0=tr.getBoundingClientRect();kn.style.left=Math.max(0,Math.min(e.clientX-r0.left,r0.width))+'px';if(Math.abs(e.clientX-sx)>6){kn.style.left='';hit()}});
+  tr.addEventListener('pointerup',function(){sx=null});tr.addEventListener('keydown',function(e){if(e.key!=='Tab')hit()});
   nx.onclick=function(){ui.innerHTML='';done()}})}
  function word(){return new Promise(function(done){
   var w=C.word,o=w.options.slice().sort(function(){return Math.random()-.5});
@@ -84,9 +87,9 @@ window.Sections.game={mount:async function(host,ctx){
   pose('girl_stand');bun.classList.remove('hop');
   await go(ang,[[b.x+(dir<0?-70:70),b.y-190]],500)}
  async function finale(){
-  var b=P(N),bx=W/2+75;gg.classList.remove('fl');pose('girl_stand');
+  var b=P(N),bx=W/2-75;gg.classList.add('fl');pose('girl_stand');
   fig.style.display='';put(fig,ang._p.x,ang._p.y);ang.style.display='none';
-  var im=fig.querySelector('img');
+  var im=fig.querySelector('img');im.style.scale='-1 1';
   for(var f=1;f<=7;f++){im.src=S('angel'+f);im.style.height=AH[f]+'px';im.classList.add('gglow');setTimeout(function(){im.classList.remove('gglow')},150);
    if(f===2)go(fig,[[bx,b.y]],1000);await wait(f<5?420:330)}
   await wait(500);hint.style.display='none';
