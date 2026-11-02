@@ -75,6 +75,12 @@ window.Sections.game={mount:async function(host,ctx){
    s.querySelector('button').onclick=function(){ui.innerHTML='';done()}};row.appendChild(b)})})}
  function hearts(){if(RM)return;for(var n=0;n<36;n++){var h=el('span','gheart','♥');h.style.left=Math.random()*100+'vw';h.style.animationDelay=Math.random()*1.4+'s';h.style.fontSize=18+Math.random()*26+'px';document.body.appendChild(h);setTimeout(function(e){e.remove()},5200,h)}}
 
+ function shadow(x,y,w){var sh=el('div','gsh');sh.style.left=x+'px';sh.style.top=(y-3)+'px';sh.style.width=w+'px';world.insertBefore(sh,gg);void sh.offsetWidth;sh.style.opacity=1}
+ function dust(x,y,n){if(RM)return;
+  for(var k=0;k<n;k++){var d=el('span','gdust'),sz=6+Math.random()*12,far=k>=n*.65;
+   d.style.cssText='left:'+(x+(Math.random()-.5)*70)+'px;top:'+(y-2-Math.random()*8)+'px;width:'+sz+'px;height:'+sz+'px';world.appendChild(d);
+   var dx=(Math.random()-.5)*(far?90:190),dy=far?-(50+Math.random()*80):-(8+Math.random()*34);
+   d.animate([{transform:'translate(0,0) scale(.4)',opacity:.95},{transform:'translate('+dx+'px,'+dy+'px) scale('+(far?1:1.7)+')',opacity:0}],{duration:(far?2400:900)+Math.random()*700,easing:'ease-out',delay:Math.random()*160}).onfinish=function(){this.effect.target.remove()}}}
  async function jump(to,slip){
   var a=P(i),b=P(to),dir=b.x<a.x?-1:1,x1=a.x+(b.x-a.x)*.2;
   fac=F(to);if(to===N)moon.style.opacity=1;gg.classList.toggle('fl',dir<0);pose('girl_run');bun.classList.add('hop');cam(to);
@@ -85,14 +91,14 @@ window.Sections.game={mount:async function(host,ctx){
    await go(gg,[[mx,my]],330,'ease-out');await go(gg,[[mx,my+230]],520,'ease-in');
    say(C.slip);await go(ang,[[mx+50,my+90]],450);await wait(250);
    var d=go(gg,[[mx,my+100],[b.x,b.y]],1100);go(ang,[[mx+50,my-60],[b.x+50,b.y-110]],1100);await d}
-  pose('girl_stand');bun.classList.remove('hop');
+  pose('girl_stand');bun.classList.remove('hop');if(to===N){shadow(b.x,b.y,100);dust(b.x,b.y,18)}
   await go(ang,[[b.x+(dir<0?-70:70),b.y-190]],500)}
  async function finale(){
   var b=P(N),bx=W/2-75;gg.classList.remove('fl');pose('girl_stand');
   fig.style.display='';put(fig,ang._p.x,ang._p.y);ang.style.display='none';
   var im=fig.querySelector('img');im.style.scale='-1 1';
   for(var f=1;f<=7;f++){im.src=S('angel'+f);im.style.height=AH[f]+'px';im.classList.add('gglow');setTimeout(function(){im.classList.remove('gglow')},150);
-   if(f===2)go(fig,[[bx,b.y]],1000);await wait(f<5?420:330)}
+   if(f===2){go(fig,[[bx,b.y]],1000);setTimeout(function(){shadow(bx,b.y,120);dust(bx,b.y,18)},1000)}await wait(f<5?420:330)}
   await wait(500);hint.style.display='none';
   var c=card('<h2>'+E.go+'</h2><button class="pill primary" type="button">'+E.here+'</button>');
   await new Promise(function(r){c.querySelector('button').onclick=r});

@@ -27,3 +27,6 @@
 .gheart{position:fixed;bottom:-30px;font-size:26px;color:#c4502f;pointer-events:none;animation:rise 3.2s ease-out forwards;z-index:9}
 @keyframes rise{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
 @media (prefers-reduced-motion:reduce){.gang img,.gtap,.gb.hop{animation:none}.gheart{display:none}}
+
+.gsh{position:absolute;height:20px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(28,6,46,.55),rgba(28,6,46,0) 70%);opacity:0;transition:opacity .7s;translate:-50% -50%;pointer-events:none}
+.gdust{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,246,222,.95),rgba(255,230,180,0) 72%);pointer-events:none;filter:blur(.6px)}

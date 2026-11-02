@@ -6,7 +6,7 @@ window.GAMECFG={
  wordAt:12,                              /* cloud with the favourite-word question */
  word:{q:'What is my favourite word to hear you call me?',options:['Habibi','Baby','Hayati','My love'],answer:'Habibi',wrong:'Not that one, try again.',
   storyTitle:'Habibi',
-  story:['Write the story behind the word here.','One line per entry, keep it to three or four lines.','The first time you said it, I was falling asleep.']},
+  story:['It was a dark, heavy night, and I felt really low.','Then your message came, and my heart pulsed with a feeling I cannot explain.','I started crying, then I wrote back to you, and you got shy.','That night, Habibi became my favourite word to hear from you.']},
  slip:'The angel caught you. Super jump!',
  end:{go:'Someone is waiting for you. Go find him.',here:'He is here',
   scaleQ:'How much do you love me?',scaleNote:'Drag it as far as you can.',scaleBroke:'You broke the limit.',
