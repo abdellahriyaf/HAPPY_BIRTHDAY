@@ -1,6 +1,6 @@
 .gm{position:fixed;inset:0;z-index:13;overflow:hidden;touch-action:manipulation;user-select:none;-webkit-user-select:none;background:#2a0e3b}
-.gsky{position:absolute;inset:0;background:linear-gradient(#2a0e3b 0%,#6b4a7a 28%,#e3a99a 62%,#f7ecd0 100%);background-size:100% 520%;background-position:0 calc(100% - var(--p,0)*100%);transition:background-position .9s ease}
-.gmoon{position:absolute;right:8%;top:6%;width:min(26vw,130px);opacity:calc(var(--p,0)*1.1)}
+.gsky{position:absolute;inset:0;background:#2a0e3b url(../bg.webp) center/cover no-repeat}
+.gmoon{position:absolute;width:360px;height:auto;opacity:0;transition:opacity .6s;pointer-events:none}
 .gcount{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:0;right:0;text-align:center;font-weight:800;color:#fff3dc;text-shadow:0 1px 0 rgba(0,0,0,.35)}
 .gworld{position:absolute;left:0;top:72%;width:100%;height:0;transition:transform .8s cubic-bezier(.3,.7,.3,1)}
 .gcl{position:absolute;width:170px;height:auto;pointer-events:none}
@@ -9,7 +9,7 @@
 .gg .gb{height:44px;left:-50px;translate:-50% 0}.gg.fl .gb{left:50px}.gg .gs{height:150px}.gg.fl .gs{scale:-1 1}
 .gb.hop{animation:hop .5s ease 2}@keyframes hop{50%{transform:translateY(-16px)}}
 .gang{position:absolute;left:0;top:0;width:0;height:0;will-change:transform}
-.gang img{position:absolute;bottom:0;left:0;translate:-50% 0;height:78px;animation:bob 2.4s ease-in-out infinite;filter:drop-shadow(0 0 10px #fff3b0)}
+.gang img{position:absolute;bottom:0;left:0;translate:-50% 0;height:78px;animation:bob 2.4s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-8px)}}
 .gtap{position:absolute;left:0;right:0;bottom:calc(26px + env(safe-area-inset-bottom,0px));text-align:center;font-weight:800;color:#fff3dc;animation:bob 1.6s ease-in-out infinite}
 .gui{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center;padding:14vh 16px 0;pointer-events:none}
@@ -23,7 +23,7 @@
 .gtrack.fast .gfill{width:100%;transition:width .08s}.gtrack.fast .gknob{left:100%;transition:left .08s}
 .gtrack.broke .gknob{left:150%;top:-90px;transform:rotate(40deg);transition:all .5s ease-in}.gtrack.broke{animation:shk .5s}
 .gval{font-family:var(--font-display);font-size:1.6rem;font-weight:600}
-.gglow{filter:drop-shadow(0 0 22px #fff3b0) brightness(1.25)}
+.gglow{filter:brightness(1.6)}
 .gheart{position:fixed;bottom:-30px;font-size:26px;color:#c4502f;pointer-events:none;animation:rise 3.2s ease-out forwards;z-index:9}
 @keyframes rise{to{transform:translateY(-110vh) rotate(25deg);opacity:0}}
 @media (prefers-reduced-motion:reduce){.gang img,.gtap,.gb.hop{animation:none}.gheart{display:none}}

@@ -3,7 +3,7 @@
 (function(){
 'use strict';
 var D='game/',RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-var GH={stand:150,jump:146,run:139,idle:106},AH=[0,160,230,230,230,230,230,190];
+var GH={stand:150,jump:146,run:139,idle:106},AH=[0,158,199,195,199,200,196,189];
 function S(n){return D+n+'.webp'}
 function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
 function wait(ms){return new Promise(function(r){setTimeout(r,RM?Math.min(ms,40):ms)})}
@@ -21,11 +21,12 @@ window.Sections.game={mount:async function(host,ctx){
  await new Promise(function(r){var l=el('link');l.rel='stylesheet';l.href='css/game.css';l.onload=r;l.onerror=r;document.head.appendChild(l)});
  var C=window.GAMECFG,N=C.clouds,E=C.end;
  ['bunny','girl_stand','girl_jump','girl_run','girl_idle','angel1','angel2','angel3','angel4','angel5','angel6','angel7'].forEach(function(n){new Image().src=S(n)});
- var root=el('div','gm','<div class="gsky"></div><img class="gmoon" src="fx/moon.webp" alt=""><div class="gcount"></div><div class="gworld"></div><div class="gui"></div><div class="gtap">Tap to jump</div>');
+ var root=el('div','gm','<div class="gsky"></div><div class="gcount"></div><div class="gworld"></div><div class="gui"></div><div class="gtap">Tap to jump</div>');
  document.body.appendChild(root);
  var W=root.clientWidth,H=root.clientHeight,step=Math.min(150,H*.2),world=root.querySelector('.gworld'),ui=root.querySelector('.gui'),count=root.querySelector('.gcount'),hint=root.querySelector('.gtap');
- function P(k){return{x:W*(k===0?.4:k%2?.7:.3),y:-k*step}}
- for(var k=0;k<=N;k++){var p=P(k),c=el('img','gcl');c.src='fx/cloud'+(k%4+1)+'.webp';c.alt='';c.style.left=(p.x-85)+'px';c.style.top=(p.y-26)+'px';world.appendChild(c)}
+ function P(k){return{x:k===N?W/2-75:W*(k===0?.4:k%2?.7:.3),y:-k*step}}
+ for(var k=0;k<N;k++){var p=P(k),c=el('img','gcl');c.src='fx/cloud'+(k%4+1)+'.webp';c.alt='';c.style.left=(p.x-85)+'px';c.style.top=(p.y-26)+'px';world.appendChild(c)}
+ var mp=P(N),moon=el('img','gmoon');moon.src='fx/moon.webp';moon.alt='';moon.style.left=(W/2-180)+'px';moon.style.top=(mp.y-16)+'px';world.appendChild(moon);
  var gg=el('div','gg','<img class="gb" src="'+S('bunny')+'" alt=""><img class="gs" src="'+S('girl_stand')+'" alt="">'),gs=gg.querySelector('.gs'),bun=gg.querySelector('.gb');
  var ang=el('div','gang','<img src="'+S('angel1')+'" alt="">'),fig=el('div','gang','<img alt="">');fig.style.display='none';
  world.appendChild(gg);world.appendChild(ang);world.appendChild(fig);
@@ -72,7 +73,7 @@ window.Sections.game={mount:async function(host,ctx){
 
  async function jump(to,slip){
   var a=P(i),b=P(to),dir=b.x<a.x?-1:1,x1=a.x+(b.x-a.x)*.2;
-  gg.classList.toggle('fl',dir<0);pose('girl_run');bun.classList.add('hop');cam(to);
+  if(to===N)moon.style.opacity=1;gg.classList.toggle('fl',dir<0);pose('girl_run');bun.classList.add('hop');cam(to);
   await go(gg,[[x1,a.y]],200,'ease-in');pose('girl_jump');
   if(!slip){await go(gg,[[(x1+b.x)/2,Math.min(a.y,b.y)-110],[b.x,b.y]],650)}
   else{
@@ -83,11 +84,11 @@ window.Sections.game={mount:async function(host,ctx){
   pose('girl_stand');bun.classList.remove('hop');
   await go(ang,[[b.x+(dir<0?-70:70),b.y-190]],500)}
  async function finale(){
-  var b=P(N),bx=Math.min(b.x+70,W-85);gg.classList.remove('fl');pose('girl_stand');await go(gg,[[bx-140,b.y]],500);
+  var b=P(N),bx=W/2+75;gg.classList.remove('fl');pose('girl_stand');
   fig.style.display='';put(fig,ang._p.x,ang._p.y);ang.style.display='none';
   var im=fig.querySelector('img');
-  for(var f=1;f<=7;f++){im.src=S('angel'+f);im.style.height=AH[f]+'px';im.classList.add('gglow');setTimeout(function(){im.classList.remove('gglow')},260);
-   if(f===2)go(fig,[[bx,b.y]],2200);await wait(f<5?900:700)}
+  for(var f=1;f<=7;f++){im.src=S('angel'+f);im.style.height=AH[f]+'px';im.classList.add('gglow');setTimeout(function(){im.classList.remove('gglow')},150);
+   if(f===2)go(fig,[[bx,b.y]],1000);await wait(f<5?420:330)}
   await wait(500);hint.style.display='none';
   var c=card('<h2>'+E.go+'</h2><button class="pill primary" type="button">'+E.here+'</button>');
   await new Promise(function(r){c.querySelector('button').onclick=r});
