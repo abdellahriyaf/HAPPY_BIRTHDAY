@@ -56,7 +56,10 @@ function pagedLetter(st,page,b,T,fold){
     pgs.push(cur);cur=[w];txt=w})});
   pgs.push(cur)}
  /* second pass: spread the text evenly so the last page is not a few orphan lines */
+ function setF(f){[uBox,tBox,fBox].forEach(function(x){x.style.fontSize=f+'px';x.style.lineHeight=Math.round(f*1.85)+'px'})}
+ function fitAll(){var f;for(f=19;f>=10;f-=.5){setF(f);if(pgs.every(function(pg){fill(uBox,pg);return uBox.scrollHeight<=uBox.clientHeight+1}))break}}
  function build(){
+  if(T.three){pgs=T.paragraphs.filter(Boolean).map(function(p){return[p]});fitAll();return}
   cap=0;run1();var n=pgs.length;if(n<2)return;
   var hs=0;pgs.forEach(function(ps){fill(uBox,ps);hs+=uBox.lastChild.offsetTop+uBox.lastChild.offsetHeight});
   var first=pgs;cap=Math.min(uBox.clientHeight,Math.ceil(hs/n/32)*32+32);run1();
@@ -100,7 +103,7 @@ function pagedLetter(st,page,b,T,fold){
   var t0=null;if(RM)ms=1;
   (function f(now){if(t0===null)t0=now;var t=Math.min(1,(now-t0)/ms);render(from+(to-from)*ease(t),u);if(t<1)requestAnimationFrame(f);else if(cb)cb()})(performance.now())}
  function layers(on){var v=on?'block':'none';top.style.display=flapw.style.display=shade.style.display=v}
- function setUI(){var last=pi>=pgs.length-1;cnt.textContent=(pi+1)+' / '+pgs.length;back.style.visibility=pi?'visible':'hidden';b.textContent=last?'\u2713':'>';b.setAttribute('aria-label',last?'Fold the letter':'Next');dog.style.display=last?'none':''}
+ function setUI(){var last=pi>=pgs.length-1;cnt.textContent=(pi+1)+' / '+pgs.length;back.style.visibility=pi?'visible':'hidden';b.innerHTML=last?'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>':'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';b.setAttribute('aria-label',last?'Close':'Next');dog.style.display=last?'none':''}
  function commit(i){hv=0;hvTok++;pi=i;fill(uBox,pgs[pi]);layers(false);setUI();busyT=false}
  function forward(u){
   if(busyT||pi>=pgs.length-1)return;busyT=true;dims();u=u||diag();
