@@ -127,12 +127,12 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 /* ===== Arabic poem: a taller scroll, facing half-lines, everything visible at once (font size is fitted in JS) ===== */
 .pstage.arp{--sw:min(93vw,430px);width:var(--sw);height:min(calc(100dvh - 118px),calc(var(--sw)*1.85))}
 .arp .scroll9{position:absolute;inset:0;width:100%;height:100%;box-sizing:border-box;border-style:solid;border-color:transparent;border-width:calc(var(--sw)*.1857) 0 calc(var(--sw)*.1786) 0;border-image:url(../fx/scroll.webp) 130 0 125 0 fill / calc(var(--sw)*.1857) 0 calc(var(--sw)*.1786) 0 stretch}
-.arp .scroll9::after{content:"";position:absolute;left:9.5%;right:9.5%;top:2%;bottom:2%;border-radius:22px;background:rgba(248,238,212,.74);box-shadow:0 0 12px 5px rgba(248,238,212,.74);pointer-events:none}
-.arp .stxt{left:12%;right:12%;top:calc(var(--sw)*.2);bottom:calc(var(--sw)*.19);overflow:hidden}
-.arp .sin{width:100%;margin:auto;font:400 15px/1.8 'Aref Ruqaa','Amiri','Scheherazade New','Traditional Arabic',serif;font-style:normal;color:#3d1d0a;text-align:start}
-.arp .sin h3{font:700 1.55em/1.5 'Aref Ruqaa','Amiri',serif;color:var(--coral);text-align:center;margin:0 0 .2em}
-.arp .verse{display:flex;justify-content:space-between;gap:.9em;margin:0 0 .22em}
-.arp .verse p{margin:0;flex:none;white-space:nowrap}
+.arp .scroll9::after{content:"";position:absolute;left:6.5%;right:6.5%;top:2%;bottom:2%;border-radius:20px;background:rgba(248,238,212,.74);box-shadow:0 0 8px 2px rgba(248,238,212,.74);pointer-events:none}
+.arp .stxt{left:6.5%;right:6.5%;top:calc(var(--sw)*.2);bottom:calc(var(--sw)*.19);overflow:hidden}
+.arp .sin{width:100%;margin:auto;font:400 15px/1.8 'Amiri','Scheherazade New','Traditional Arabic',serif;font-style:normal;color:#3d1d0a;text-align:start}
+.arp .sin h3{font:700 1.6em/1.5 'Amiri',serif;color:var(--coral);text-align:center;margin:0 0 .2em}
+.arp .verse{display:grid;grid-template-columns:1fr 1fr;column-gap:.7em;margin:0 0 .22em}
+.arp .verse p{margin:0;min-width:0;white-space:nowrap;text-align:center}
 .arp .vsep{text-align:center;color:var(--rust);font-size:.9em;line-height:1;margin:.2em 0 .5em;letter-spacing:.5em;text-indent:.5em}
 .arp .bunny{width:30%}
 .arp .b1{left:-8%;top:-7%}
@@ -155,7 +155,7 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .lpg .flap::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .1 0 0 0 .55 -.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.28}
 .lpg .lnav{position:absolute;left:0;right:0;bottom:26px;z-index:5;display:flex;align-items:center;justify-content:center;gap:12px}
 .lpg .lnav .pbtn{margin:0}
-.lpg .lback{padding:7px 14px;font-size:.9rem}
+.lpg .lnav .pill{direction:ltr;min-width:56px;padding:3px 14px 5px;font:800 1.7rem/1.15 var(--font-ui)}
 .lpg .lcount{min-width:42px;text-align:center;direction:ltr;font:800 .85rem var(--font-ui);color:#6b4425}
 .lpg .dogear{position:absolute;right:0;bottom:0;width:86px;height:86px;z-index:6;touch-action:none;cursor:grab;-webkit-tap-highlight-color:transparent}
 .lpg .dogear i{position:absolute;right:4px;bottom:4px;width:38px;height:38px;background:linear-gradient(135deg,rgba(80,44,16,.4),transparent 55%),linear-gradient(315deg,transparent 50%,#ecd9a8 50%);box-shadow:-3px -3px 7px rgba(70,38,12,.4);transform-origin:100% 100%;animation:dogtap 2.8s ease-in-out infinite}

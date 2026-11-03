@@ -36,7 +36,7 @@ function pagedLetter(st,page,b,T,fold){
  var shadow=div('lshadow'),stack=div('lstack'),under=sheet('s-under'),shade=div('lshade'),top=sheet('s-top'),flap=div('flap');
  shadow.style.clipPath=edgeP;
  stack.appendChild(under);stack.appendChild(shade);stack.appendChild(top);stack.appendChild(flap);
- var nav=div('lnav','<button class="pill lback" type="button">Back</button><span class="lcount"></span>'),back=nav.firstChild,cnt=nav.children[1];
+ var nav=div('lnav','<button class="pill lback" type="button" aria-label="Back">&gt;</button><span class="lcount"></span>'),back=nav.firstChild,cnt=nav.children[1];
  nav.appendChild(b);
  var dog=div('dogear','<i></i>');dog.setAttribute('role','button');dog.setAttribute('aria-label','Turn the page');
  page.appendChild(shadow);page.appendChild(stack);page.appendChild(nav);page.appendChild(dog);
@@ -87,7 +87,7 @@ function pagedLetter(st,page,b,T,fold){
   var t0=null;if(RM)ms=1;
   (function f(now){if(t0===null)t0=now;var t=Math.min(1,(now-t0)/ms);render(from+(to-from)*ease(t),u);if(t<1)requestAnimationFrame(f);else if(cb)cb()})(performance.now())}
  function layers(on){var v=on?'block':'none';top.style.display=flap.style.display=shade.style.display=v}
- function setUI(){var last=pi>=pgs.length-1;cnt.textContent=(pi+1)+' / '+pgs.length;back.style.visibility=pi?'visible':'hidden';b.textContent=last?'Fold the letter':'Next';dog.style.display=last?'none':''}
+ function setUI(){var last=pi>=pgs.length-1;cnt.textContent=(pi+1)+' / '+pgs.length;back.style.visibility=pi?'visible':'hidden';b.textContent=last?'\u2713':'<';b.setAttribute('aria-label',last?'Fold the letter':'Next');dog.style.display=last?'none':''}
  function commit(i){pi=i;fill(uBox,pgs[pi]);layers(false);setUI();busyT=false}
  function forward(u){
   if(busyT||pi>=pgs.length-1)return;busyT=true;dims();u=u||diag();
@@ -162,11 +162,11 @@ function poem(T){
    var box=st.querySelector('.stxt'),rows=[].slice.call(sin.querySelectorAll('.verse'));
    var okSize=function(f){sin.style.fontSize=f+'px';
     if(sin.scrollHeight>box.clientHeight+1)return false;
-    return rows.every(function(r){return r.children[0].offsetWidth+r.children[1].offsetWidth+f*.9<=r.clientWidth+1})};
-   var fit=function(){var lo=8,hi=26,i,m;for(i=0;i<11;i++){m=(lo+hi)/2;if(okSize(m))lo=m;else hi=m}sin.style.fontSize=lo+'px'};
+    return rows.every(function(r){return[].every.call(r.children,function(p){return p.scrollWidth<=p.clientWidth+1})})};
+   var fit=function(){var lo=8,hi=26,i,m;for(i=0;i<11;i++){m=(lo+hi)/2;if(okSize(m))lo=m;else hi=m}sin.style.fontSize=(lo*.96)+'px'};
    var onR=function(){if(!document.body.contains(ov)){removeEventListener('resize',onR);return}fit()};
    var smp=T.verses[0].join(' ');
-   Promise.race([Promise.all([document.fonts.load('400 16px "Aref Ruqaa"',smp),document.fonts.load('700 16px "Aref Ruqaa"',T.title||'')]).catch(function(){}),new Promise(function(r){setTimeout(r,1800)})]).then(function(){fit();addEventListener('resize',onR)});
+   Promise.race([Promise.all([document.fonts.load('400 16px "Amiri"',smp),document.fonts.load('700 16px "Amiri"',T.title||'')]).catch(function(){}),new Promise(function(r){setTimeout(r,1800)})]).then(function(){fit();addEventListener('resize',onR);if(document.fonts.ready)document.fonts.ready.then(fit)});
   }else lines(sin,{title:T.title,lines:T.lines});
   A(ov,[{opacity:0},{opacity:1}],{duration:300});
   A(scroll,[{clipPath:'inset(0 0 100% 0)',opacity:0},{clipPath:'inset(0 0 100% 0)',opacity:0}],{duration:1});A(txt,[{opacity:0},{opacity:0}],{duration:1});A(b,[{opacity:0},{opacity:0}],{duration:1});
