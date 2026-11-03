@@ -26,7 +26,8 @@ window.Sections.game={mount:async function(host,ctx){
  var W=root.clientWidth,H=root.clientHeight,step=Math.min(150,H*.2),world=root.querySelector('.gworld'),ui=root.querySelector('.gui'),count=root.querySelector('.gcount'),hint=root.querySelector('.gtap');
  function P(k){return{x:k===N?W/2+75:W*(k===0?.4:k%2?.7:.3),y:-k*step}}
  for(var k=0;k<N;k++){var p=P(k),c=el('img','gcl');c.src='fx/cloud'+(k%4+1)+'.webp';c.alt='';c.style.left=(p.x-85)+'px';c.style.top=(p.y-26)+'px';world.appendChild(c)}
- var mp=P(N),moon=el('img','gmoon');moon.src='fx/moon.webp';moon.alt='';moon.style.width='800px';moon.style.left=(W/2-425)+'px';moon.style.top=(mp.y-130)+'px';world.appendChild(moon);
+ var moonBig=el('img','gmoonbig'),Wm=Math.round(W*3.1);moonBig.src='fx/moon.webp';moonBig.alt='';
+ moonBig.style.cssText='width:'+Wm+'px;left:'+Math.round(W/2-Wm/2)+'px;top:'+Math.round(H*.72-4)+'px';root.insertBefore(moonBig,world);
  var gg=el('div','gg','<img class="gb" src="'+S('bunny')+'" alt=""><img class="gs" src="'+S('girl_stand')+'" alt="">'),gs=gg.querySelector('.gs'),bun=gg.querySelector('.gb');
  var ang=el('div','gang','<img src="'+S('angel1')+'" alt="">'),fig=el('div','gang','<img alt="">');fig.style.display='none';
  world.appendChild(gg);world.appendChild(ang);world.appendChild(fig);
@@ -83,13 +84,13 @@ window.Sections.game={mount:async function(host,ctx){
    d.animate([{transform:'translate(0,0) scale(.4)',opacity:.95},{transform:'translate('+dx+'px,'+dy+'px) scale('+(far?1:1.7)+')',opacity:0}],{duration:(far?2400:900)+Math.random()*700,easing:'ease-out',delay:Math.random()*160}).onfinish=function(){this.effect.target.remove()}}}
  async function jump(to,slip){
   var a=P(i),b=P(to),dir=b.x<a.x?-1:1,x1=a.x+(b.x-a.x)*.2;
-  fac=F(to);if(to===N)moon.style.opacity=1;gg.classList.toggle('fl',dir<0);pose('girl_run');bun.classList.add('hop');cam(to);
+  fac=F(to);gg.classList.toggle('fl',dir<0);pose('girl_run');bun.classList.add('hop');cam(to);
   await go(gg,[[x1,a.y]],200,'ease-in');pose('girl_jump');
-  if(!slip){await go(gg,[[(x1+b.x)/2,Math.min(a.y,b.y)-110],[b.x,b.y]],650)}
+  if(!slip){await go(gg,[[(x1+b.x)/2,Math.min(a.y,b.y)-140],[b.x,b.y]],650)}
   else{
    var mx=(x1+b.x)/2,my=Math.min(a.y,b.y)-70;
    await go(gg,[[mx,my]],330,'ease-out');await go(gg,[[mx,my+230]],520,'ease-in');
-   say(C.slip);await go(ang,[[mx+50,my+90]],450);await wait(250);
+   bubble(C.slip,3200);shieldPulse();await go(ang,[[mx+50,my+90]],450);await wait(250);
    var d=go(gg,[[mx,my+100],[b.x,b.y]],1100);go(ang,[[mx+50,my-60],[b.x+50,b.y-110]],1100);await d}
   pose('girl_stand');bun.classList.remove('hop');if(to===N){shadow(b.x,b.y,100);dust(b.x,b.y,18)}
   await go(ang,[[b.x+(dir<0?-70:70),b.y-190]],500)}
@@ -111,11 +112,52 @@ window.Sections.game={mount:async function(host,ctx){
    if(qi>-1)await yesno(C.love.q,pick(C.love.yes,qi),C.love.no,C.love.dodge);else await word();
    pose('girl_stand')}
   if(k===N)await finale()}
+
+ /* ---------- the angel talks, gives powers, then carries her to the moon ---------- */
+ var bub=el('div','gsay'),bt=0,bf=0;root.appendChild(bub);
+ function bfollow(){var im=ang.querySelector('img'),r=im.getBoundingClientRect(),bw=bub.offsetWidth,bh=bub.offsetHeight,cx=Math.max(bw/2+8,Math.min(W-bw/2-8,r.left+r.width/2));
+  bub.style.left=(cx-bw/2)+'px';bub.style.top=Math.max(8,r.top-bh-10)+'px';if(bub.classList.contains('on'))bf=requestAnimationFrame(bfollow)}
+ function bubble(t,ms){bub.textContent=t;bub.style.width=Math.min(230,W*.62)+'px';bub.classList.add('on');cancelAnimationFrame(bf);bfollow();clearTimeout(bt);bt=setTimeout(function(){bub.classList.remove('on')},ms||2800)}
+ function shieldPulse(){var s=el('span','gshield');gg.appendChild(s);setTimeout(function(){s.remove()},1700)}
+ function intro(){return new Promise(function(done){
+  var I=C.intro,c=card('<h2>'+I.h+'</h2><p>'+I.p+'</p><div class="gpows">'+I.powers.map(function(x){return'<div class="gpw"><b>'+x[0]+'</b><span><strong>'+x[1]+'</strong>'+x[2]+'</span></div>'}).join('')+'</div><button class="pill primary" type="button">'+I.go+'</button>');
+  c.querySelector('button').onclick=function(){ui.innerHTML='';gg.classList.add('power');
+   root.appendChild(el('div','gpow',I.powers.map(function(x){return'<span>'+x[0]+' '+x[1]+'</span>'}).join('')));
+   setTimeout(function(){bubble(C.cheer[0])},500);done()}})}
+ function stars(ms){var out=[];
+  for(var k=0;k<34;k++){var s=el('span','gstar'),sz=2+Math.random()*3;
+   s.style.cssText='left:'+Math.random()*100+'%;top:0;width:'+sz+'px;height:'+(sz*(4+Math.random()*10))+'px';root.insertBefore(s,world);
+   if(!RM)s.animate([{transform:'translateY(-40px)',opacity:0},{opacity:.9,offset:.2},{transform:'translateY('+(H+60)+'px)',opacity:0}],{duration:700+Math.random()*900,iterations:Infinity,delay:-Math.random()*1500,easing:'linear'});out.push(s)}
+  setTimeout(function(){out.forEach(function(s){s.remove()})},ms)}
+ async function ascend(){
+  var a=P(i),b=P(N),rise=H*.22,FL=Math.round(H*1.8),T0=i*step,dur=RM?80:6200,ease='cubic-bezier(.45,.05,.5,1)',y0=a.y-rise;
+  hint.style.display='none';gg.classList.remove('fl');bubble(C.lift,2800);
+  await go(ang,[[a.x,a.y-130]],700);                                   /* the angel swoops down to her */
+  pose('girl_jump');gg.classList.add('lift');ang.classList.add('lift');dust(a.x,a.y,10);
+  await Promise.all([go(gg,[[a.x,y0]],900,'ease-out'),go(ang,[[a.x,y0-130]],900,'ease-out')]);   /* both lift off */
+  /* the flight: clouds fall away, the moon grows out of the sky */
+  world.style.transition='none';
+  var wa=world.animate([{transform:'translateY('+T0+'px)'},{transform:'translateY('+(T0+FL)+'px)'}],{duration:RM?60:dur,easing:ease,fill:'forwards'});
+  moonBig.animate([{transform:'translateY('+(-H*.66)+'px) scale(.05)',opacity:0},{opacity:1,offset:.22},{transform:'none',opacity:1}],{duration:RM?60:dur,easing:'cubic-bezier(.5,0,.75,.75)',fill:'forwards'});
+  stars(dur);setTimeout(function(){bubble(C.cheer[3],2400)},RM?10:2600);
+  await Promise.all([go(gg,[[a.x,y0-FL]],dur,ease),go(ang,[[a.x,y0-FL-130]],dur,ease)]);
+  /* clouds are far below now: re-aim the camera so the moon top is where she will land */
+  world.style.transform='translateY('+(N*step)+'px)';wa.cancel();void world.offsetWidth;world.style.transition='';world.classList.add('mm');
+  put(gg,a.x,-rise-N*step);put(ang,a.x,-rise-N*step-130);fac=F(N);
+  var land='cubic-bezier(.3,.8,.4,1)';
+  await Promise.all([go(gg,[[b.x,b.y]],1200,land),go(ang,[[b.x+70,b.y-190]],1200,land)]);
+  gg.classList.remove('lift');ang.classList.remove('lift');pose('girl_stand');shadow(b.x,b.y,100);dust(b.x,b.y,22);cam(N);
+  bubble(C.win,3200);await wait(2600)}
  var ready=true;
  async function tap(){
   if(!ready||i>=N)return;ready=false;hint.style.display='none';
-  var to=i+1,slip=to>1&&to<N&&(to===7||to===13||Math.random()<.12);
-  await jump(to,slip);i=to;await plan(to);ready=i<N}
+  var to=i+1;
+  if(to===N){await ascend();i=N;await plan(N);return}
+  var slip=to>1&&to<N&&(to===7||to===13||Math.random()<.12);
+  await jump(to,slip);i=to;var ci=C.cheerAt.indexOf(to);if(ci>-1)bubble(pick(C.cheer,ci));
+  await plan(to);if(i===N-1){hint.textContent=C.carry;hint.style.display=''}
+  ready=i<N}
+ if(i===0){ready=false;await intro();ready=true}
  root.addEventListener('pointerdown',function(e){if(!e.target.closest('.gcard,.gno'))tap()});
  document.addEventListener('keydown',function(e){if(e.code==='Space'&&!e.target.closest('button,.gtrack'))tap()})
 }};

@@ -147,17 +147,26 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .lpg .s-top{display:none;will-change:clip-path}
 .lpg .sheet .edge{position:absolute;inset:0;background:linear-gradient(135deg,#6b3f16,#9b6a33 50%,#6b3f16)}
 .lpg .sheet .paper{position:absolute;inset:0;background-color:#f1e0b4;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .1 0 0 0 .55 -.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(ellipse 45% 30% at 18% 14%,rgba(176,120,50,.24),transparent 70%),radial-gradient(ellipse 40% 28% at 84% 86%,rgba(140,88,36,.3),transparent 70%),radial-gradient(circle at 0 0,rgba(105,58,20,.5),transparent 90px),radial-gradient(circle at 100% 0,rgba(105,58,20,.4),transparent 80px),radial-gradient(circle at 0 100%,rgba(105,58,20,.4),transparent 80px),radial-gradient(circle at 100% 100%,rgba(105,58,20,.55),transparent 100px),repeating-linear-gradient(transparent 0 31px,rgba(110,59,29,.14) 31px 32px);box-shadow:inset 0 0 38px rgba(120,72,28,.5),inset 0 0 7px rgba(80,44,16,.45)}
-.lpg .sheet .ptxt{position:absolute;left:26px;right:26px;top:32px;bottom:92px;overflow:hidden;padding:0;font:400 1.1rem/32px 'Scheherazade New','Amiri','Traditional Arabic',serif;color:#3a1c0a;text-align:start}
-.lpg .sheet .ptxt p{margin:0 0 32px}
-.lpg .sheet .ptxt p:last-child{margin-bottom:0}
+.lpg .sheet .ptxt,.lpg .flap .ptxt{position:absolute;left:26px;right:26px;top:32px;bottom:92px;overflow:hidden;padding:0;font:400 1.1rem/32px 'Scheherazade New','Amiri','Traditional Arabic',serif;color:#3a1c0a;text-align:start}
+.lpg .sheet .ptxt p,.lpg .flap .ptxt p{margin:0 0 32px}
+.lpg .sheet .ptxt p:last-child,.lpg .flap .ptxt p:last-child{margin-bottom:0}
 .lpg .lshade{position:absolute;inset:0;display:none;pointer-events:none}
-.lpg .flap{position:absolute;inset:0;display:none;transform-origin:0 0;pointer-events:none;background-color:#e3cb96}
+.lpg .flapw{position:absolute;inset:0;display:none;pointer-events:none;filter:drop-shadow(0 4px 7px rgba(40,20,5,.5))}
+.lpg .flap{position:absolute;inset:0;transform-origin:0 0;pointer-events:none;background-color:#e3cb96}
+.lpg .flap .fb{position:absolute;inset:0;transform:scaleX(-1);opacity:.14}
 .lpg .flap::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .1 0 0 0 .55 -.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.28}
-.lpg .lnav{position:absolute;left:0;right:0;bottom:26px;z-index:5;display:flex;align-items:center;justify-content:center;gap:12px}
+.lpg .lnav{direction:ltr;position:absolute;left:0;right:0;bottom:26px;z-index:7;pointer-events:none;display:flex;align-items:center;justify-content:center;gap:12px}
 .lpg .lnav .pbtn{margin:0}
 .lpg .lnav .pill{direction:ltr;min-width:56px;padding:3px 14px 5px;font:800 1.7rem/1.15 var(--font-ui)}
 .lpg .lcount{min-width:42px;text-align:center;direction:ltr;font:800 .85rem var(--font-ui);color:#6b4425}
-.lpg .dogear{position:absolute;right:0;bottom:0;width:86px;height:86px;z-index:6;touch-action:none;cursor:grab;-webkit-tap-highlight-color:transparent}
+.lpg .dogear{position:absolute;right:0;bottom:0;width:120px;height:120px;z-index:6;touch-action:none;cursor:grab;-webkit-tap-highlight-color:transparent}
 .lpg .dogear i{position:absolute;right:4px;bottom:4px;width:38px;height:38px;background:linear-gradient(135deg,rgba(80,44,16,.4),transparent 55%),linear-gradient(315deg,transparent 50%,#ecd9a8 50%);box-shadow:-3px -3px 7px rgba(70,38,12,.4);transform-origin:100% 100%;animation:dogtap 2.8s ease-in-out infinite}
 @keyframes dogtap{0%,70%,100%{transform:scale(1)}82%{transform:scale(1.28)}92%{transform:scale(1.08)}}
 @media (prefers-reduced-motion:reduce){.lpg .dogear i{animation:none}}
+
+/* story pages use the same peel book as the letter */
+.sstage.arl{width:min(88vw,380px)}
+.sstage.arl .cn-br{visibility:hidden}
+
+.lpg .lnav>*{pointer-events:auto}
+.sstage.arl .cn-tl{width:22%;left:-4%;top:-3%}
