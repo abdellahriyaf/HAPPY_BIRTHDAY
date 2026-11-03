@@ -123,3 +123,29 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .moonring text{stroke:rgba(14,2,24,.9);stroke-width:3.4px}
 /* moon a bit further left, away from the cabinet */
 .moonbg{left:10%}
+
+/* Arabic poem on the scroll: Amiri for the verses, Aref Ruqaa for the title, one hemistich per line */
+.pstage.arp{width:min(82vw,380px)}
+.arp .stxt{left:13.5%;right:13.5%;top:14%;bottom:12%}
+.arp .sin{font:400 clamp(.92rem,4.1vw,1.12rem)/1.95 'Amiri','Scheherazade New','Traditional Arabic','Noto Naskh Arabic',serif;font-style:normal;width:100%}
+.arp .sin h3{font:700 clamp(1.5rem,7vw,1.9rem)/1.6 'Aref Ruqaa','Amiri',serif;color:var(--coral);margin:0 0 .35em}
+.arp .verse{margin:0 0 .7em}
+.arp .verse p{margin:0;text-wrap:balance}
+.arp .verse p:first-child{font-weight:700}
+.arp .vsep{margin:.5em 0 .9em;color:var(--rust);font-size:1rem;letter-spacing:.6em;text-indent:.6em;line-height:1}
+
+/* Arabic letter: flip through pages (Back / Next), text split to fit the page */
+.lstage.arl{width:min(84vw,360px)}
+.arl .fpage{padding:26px 22px 14px}
+.arl .ptxt{font:400 1.14rem/32px 'Amiri','Scheherazade New','Traditional Arabic','Noto Naskh Arabic',serif;text-align:start;color:var(--ink);padding:0}
+.arl .ptxt p{margin:0 0 32px;text-wrap:pretty}
+.arl .ptxt p:last-child{margin-bottom:0}
+.lnav{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px;flex:none}
+.lnav .pbtn{margin-top:0}
+.lback{padding:7px 14px;font-size:.9rem}
+.lcount{min-width:42px;text-align:center;direction:ltr;font:800 .85rem var(--font-ui);color:var(--ink-soft)}
+
+.arl .fpage{padding-bottom:20px}
+.arl .lnav{margin-top:10px;margin-bottom:8px}
+
+.arl .ptxt{position:relative}

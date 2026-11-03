@@ -18,10 +18,47 @@ function close(ov,inner){
 /* ---- letter ---- */
 function letter(T){
  return new Promise(function(done){
-  var ov=el('<div class="ov fxov"><div class="stage lstage" dir="'+(T.dir||'ltr')+'"><div class="fpage lpage"><div class="ptxt"></div><button class="pill primary pbtn" type="button">Fold the letter</button></div><img class="bl bl-l" src="fx/blossom.webp" alt="" draggable="false"><img class="bl bl-r" src="fx/blossom.webp" alt="" draggable="false"></div></div>');
+  var ov=el('<div class="ov fxov"><div class="stage lstage" dir="'+(T.dir||'ltr')+'"><div class="fpage lpage"><div class="ptxt"></div><div class="lnav"><button class="pill lback" type="button">Back</button><span class="lcount"></span><button class="pill primary pbtn" type="button">Fold the letter</button></div></div><img class="bl bl-l" src="fx/blossom.webp" alt="" draggable="false"><img class="bl bl-r" src="fx/blossom.webp" alt="" draggable="false"></div></div>');
   document.body.appendChild(ov);
   var st=ov.firstChild,page=st.querySelector('.lpage'),L=st.querySelector('.bl-l'),R=st.querySelector('.bl-r'),b=st.querySelector('.pbtn');
-  lines(st.querySelector('.ptxt'),{title:T.title,lines:T.paragraphs});
+  var fold=function(){b.disabled=true;close(ov,st).then(done)};
+  if(T.paged){
+   st.classList.add('arl');if(T.lang)st.lang=T.lang;
+   var box=st.querySelector('.ptxt'),back=st.querySelector('.lback'),cnt=st.querySelector('.lcount'),pgs=[],pi=0,turning=false,rtl=(T.dir==='rtl');
+   box.style.transformOrigin=rtl?'right center':'left center';
+   var fill=function(ps){box.innerHTML='';ps.forEach(function(t){var p=document.createElement('p');p.textContent=t;box.appendChild(p)});box.scrollTop=0};
+   var cap=0,fits=function(ps){fill(ps);return (box.lastChild.offsetTop+box.lastChild.offsetHeight)<=Math.min(cap||1e9,box.clientHeight)+1};
+   var run=function(){
+    var cur=[];pgs=[];
+    T.paragraphs.filter(Boolean).forEach(function(para){
+     var txt='';cur.push('');
+     para.split(/\s+/).filter(Boolean).forEach(function(w){
+      var t=txt?txt+' '+w:w;cur[cur.length-1]=t;
+      if(fits(cur)){txt=t;return}
+      if(txt)cur[cur.length-1]=txt;else cur.pop();
+      pgs.push(cur);cur=[w];txt=w})});
+    pgs.push(cur)};
+   /* second pass: spread the text evenly so the last page is not a few orphan lines */
+   var build=function(){
+    cap=0;run();var n=pgs.length;if(n<2)return;
+    var hs=0;pgs.forEach(function(ps){fill(ps);hs+=(box.lastChild.offsetTop+box.lastChild.offsetHeight)});
+    var c=Math.min(box.clientHeight,Math.ceil(hs/n/32)*32+32),first=pgs;
+    cap=c;run();if(pgs.length!==n)pgs=first;cap=0};
+   var show=function(){fill(pgs[pi]);cnt.textContent=(pi+1)+' / '+pgs.length;back.style.visibility=pi?'visible':'hidden';b.textContent=pi<pgs.length-1?'Next':'Fold the letter'};
+   var go=function(d){
+    var n=pi+d;if(turning||n<0||n>=pgs.length)return;turning=true;var s=(rtl?-1:1)*d;
+    A(box,[{opacity:1,transform:'perspective(900px) rotateY(0deg)'},{opacity:0,transform:'perspective(900px) rotateY('+(-s*75)+'deg)'}],{duration:280,easing:'ease-in'})
+     .then(function(){pi=n;show();return A(box,[{opacity:0,transform:'perspective(900px) rotateY('+(s*35)+'deg)'},{opacity:1,transform:'perspective(900px) rotateY(0deg)'}],{duration:320,easing:'ease-out'})})
+     .then(function(){turning=false})};
+   b.onclick=function(){if(pi<pgs.length-1)go(1);else fold()};
+   back.onclick=function(){go(-1)};
+   back.style.visibility='hidden';
+   var sample=T.paragraphs.join(' ').slice(0,60),ft=new Promise(function(r){setTimeout(r,1500)});
+   Promise.race([Promise.all([document.fonts.load('400 1.14rem Amiri',sample)]).catch(function(){}),ft]).then(function(){build();show()});
+  }else{
+   st.querySelector('.lback').remove();st.querySelector('.lcount').remove();
+   lines(st.querySelector('.ptxt'),{title:T.title,lines:T.paragraphs});
+   b.onclick=fold}
   A(ov,[{opacity:0},{opacity:1}],{duration:300});
   A(page,[{opacity:0,transform:'scaleY(.04)'},{opacity:0,transform:'scaleY(.04)'}],{duration:1});
   A(L,[{opacity:0},{opacity:0}],{duration:1});A(R,[{opacity:0},{opacity:0}],{duration:1});
@@ -33,7 +70,7 @@ function letter(T){
    function hold(e,sign,cx){return A(e,[{transform:'translate(-50%,-50%) translate(0px,0px) scale(1)'},{transform:'translate(-50%,-50%) translate('+(-(cx-.5)*bw*sc)+'px,'+(sign*dd)+'px) scale('+sc+')'}],{duration:1100,easing:'cubic-bezier(.5,0,.25,1)'})}
    hold(L,-1,.534);hold(R,1,.518);
    A(page,[{opacity:0,transform:'scaleY(.04)'},{opacity:1,transform:'scaleY(1)'}],{duration:1000,delay:120,easing:'cubic-bezier(.25,.9,.3,1)'})})});
-  b.onclick=function(){b.disabled=true;close(ov,st).then(done)}})}
+  })}
 
 /* ---- poem ---- */
 function poem(T){
@@ -41,7 +78,10 @@ function poem(T){
   var ov=el('<div class="ov fxov"><div class="pcol"><div class="stage pstage" dir="'+(T.dir||'ltr')+'"><img class="scroll" src="fx/scroll.webp" alt="" draggable="false"><div class="stxt"><div class="sin"></div></div><img class="bunny b1" src="fx/bunny1.webp" alt="" draggable="false"><img class="bunny b2" src="fx/bunny2.webp" alt="" draggable="false"></div><button class="pill primary pbtn" type="button">Close</button></div></div>');
   document.body.appendChild(ov);
   var st=ov.querySelector('.pstage'),scroll=st.querySelector('.scroll'),txt=st.querySelector('.stxt'),b1=st.querySelector('.b1'),b2=st.querySelector('.b2'),b=ov.querySelector('.pbtn');
-  lines(st.querySelector('.sin'),{title:T.title,lines:T.lines});
+  if(T.verses){var sin=st.querySelector('.sin'),h=document.createElement('h3');h.textContent=T.title||'';sin.appendChild(h);
+   T.verses.forEach(function(v){if(v==='-'){var s=document.createElement('div');s.className='vsep';s.textContent='\u2726';sin.appendChild(s);return}
+    var d=document.createElement('div');d.className='verse';v.forEach(function(t){var p=document.createElement('p');p.textContent=t;d.appendChild(p)});sin.appendChild(d)});
+   st.classList.add('arp');if(T.lang)st.lang=T.lang}else lines(st.querySelector('.sin'),{title:T.title,lines:T.lines});
   A(ov,[{opacity:0},{opacity:1}],{duration:300});
   A(scroll,[{clipPath:'inset(0 0 100% 0)',opacity:0},{clipPath:'inset(0 0 100% 0)',opacity:0}],{duration:1});A(txt,[{opacity:0},{opacity:0}],{duration:1});A(b,[{opacity:0},{opacity:0}],{duration:1});
   Promise.all([ready(scroll),ready(b1),ready(b2)]).then(function(){
