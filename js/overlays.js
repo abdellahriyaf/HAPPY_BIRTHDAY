@@ -31,7 +31,8 @@ function pagedLetter(st,page,b,T,fold){
  var rtl=T.dir==='rtl',pgs=[],pi=0,busyT=false,W=0,H=0,D=0,cap=0,drag=null;
  st.classList.add('arl');if(T.lang)st.lang=T.lang;
  page.className='lpg';page.innerHTML='';
- var edgeP=rag(7,0,2.4),paperP=rag(11,3.2,2.4);
+ var vint=st.classList.contains('sstage'),edgeP=vint?rag(7,0,5.5):rag(7,0,2.4),paperP=vint?rag(11,4,5.5):rag(11,3.2,2.4);
+ if(vint)st.classList.add('vint');
  function sheet(cls){var s=div('sheet '+cls,'<div class="edge"></div><div class="paper"></div><div class="ptxt"></div>');s.children[0].style.clipPath=edgeP;s.children[1].style.clipPath=paperP;return s}
  var shadow=div('lshadow'),stack=div('lstack'),under=sheet('s-under'),shade=div('lshade'),top=sheet('s-top'),flapw=div('flapw'),flap=div('flap','<div class="fb"><div class="ptxt"></div></div>');flapw.appendChild(flap);
  shadow.style.clipPath=edgeP;
@@ -83,25 +84,39 @@ function pagedLetter(st,page,b,T,fold){
   var wd=Math.max(8,Math.min(2*d,150));flap.style.backgroundImage='linear-gradient('+th+'deg,#8a6228 '+tf+'px,#f2e0ae '+(tf+wd*.16)+'px,#dcc48c '+(tf+wd*.55)+'px,#ecd8a4 '+(tf+wd)+'px)';
   shade.style.background='linear-gradient('+th+'deg,rgba(45,22,6,.42) '+tf+'px,rgba(45,22,6,0) '+(tf+Math.min(d*1.4,80))+'px)'}
  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+ function swing(u0,k){var a=Math.atan2(u0.y,u0.x)+k*.55,x=Math.cos(a),y=Math.sin(a);if(y>-.12)return u0;return{x:x,y:y}}
+ function flip(rev,d0,ms,cb){
+  var t0=null,tk=++hvTok;if(RM)ms=1;var u0=diag();
+  (function f(now){if(t0===null)t0=now;var t=Math.min(1,(now-t0)/ms),e=ease(rev?1-t:t),u=swing(u0,e),m=smax(u);
+   render(Math.max(d0*(1-e),0)+e*m*(rev?1:1),u);if(t<1)requestAnimationFrame(f);else if(cb)cb()})(performance.now())}
+ var hv=0,hvTok=0;
+ /* hover: the corner lifts a little toward the top-left, only the top sheet */
+ function peek(to){
+  if(busyT||drag||pi>=pgs.length-1)return;dims();var tk=++hvTok,from=hv,u=diag(),t0=null;
+  if(to>0&&!hv){fill(tBox,pgs[pi]);fill(fBox,pgs[pi]);fill(uBox,pgs[pi+1]);layers(true)}
+  (function f(now){if(tk!==hvTok)return;if(t0===null)t0=now;var t=Math.min(1,(now-t0)/260),e=1-Math.pow(1-t,3);hv=from+(to-from)*e;render(hv,u);
+   if(t<1)requestAnimationFrame(f);else if(!to){hv=0;layers(false);fill(uBox,pgs[pi])}})(performance.now())}
  function run(u,from,to,ms,cb){
   var t0=null;if(RM)ms=1;
   (function f(now){if(t0===null)t0=now;var t=Math.min(1,(now-t0)/ms);render(from+(to-from)*ease(t),u);if(t<1)requestAnimationFrame(f);else if(cb)cb()})(performance.now())}
  function layers(on){var v=on?'block':'none';top.style.display=flapw.style.display=shade.style.display=v}
  function setUI(){var last=pi>=pgs.length-1;cnt.textContent=(pi+1)+' / '+pgs.length;back.style.visibility=pi?'visible':'hidden';b.textContent=last?'\u2713':'>';b.setAttribute('aria-label',last?'Fold the letter':'Next');dog.style.display=last?'none':''}
- function commit(i){pi=i;fill(uBox,pgs[pi]);layers(false);setUI();busyT=false}
+ function commit(i){hv=0;hvTok++;pi=i;fill(uBox,pgs[pi]);layers(false);setUI();busyT=false}
  function forward(u){
   if(busyT||pi>=pgs.length-1)return;busyT=true;dims();u=u||diag();
-  fill(tBox,pgs[pi]);fill(fBox,pgs[pi]);fill(uBox,pgs[pi+1]);render(0,u);layers(true);
-  run(u,0,smax(u),900,function(){commit(pi+1)})}
+  var h0=hv;hvTok++;fill(tBox,pgs[pi]);fill(fBox,pgs[pi]);fill(uBox,pgs[pi+1]);render(h0,u);layers(true);
+  flip(false,h0,1000,function(){commit(pi+1)})}
  function backward(){
   if(busyT||pi<1)return;busyT=true;dims();var u=diag(),m=smax(u);
   fill(tBox,pgs[pi-1]);fill(fBox,pgs[pi-1]);fill(uBox,pgs[pi]);render(m,u);layers(true);
-  run(u,m,0,900,function(){commit(pi-1)})}
+  flip(true,0,1000,function(){commit(pi-1)})}
  b.onclick=function(){if(pi<pgs.length-1)forward();else fold()};
  back.onclick=backward;
  /* drag the corner with a finger or the mouse; a plain tap turns the whole page */
+ dog.onpointerenter=function(e){if(e.pointerType==='mouse')peek(30)};
+ dog.onpointerleave=function(){peek(0)};
  dog.onpointerdown=function(e){
-  if(busyT||pi>=pgs.length-1)return;dims();
+  if(busyT||pi>=pgs.length-1)return;dims();hvTok++;
   drag={x:e.clientX,y:e.clientY,moved:false,r:page.getBoundingClientRect(),u:diag(),d:0};
   try{dog.setPointerCapture(e.pointerId)}catch(x){}e.preventDefault()};
  dog.onpointermove=function(e){
@@ -113,7 +128,7 @@ function pagedLetter(st,page,b,T,fold){
   drag.u={x:vx/len,y:vy/len};drag.d=len/2;render(drag.d,drag.u)};
  dog.onpointerup=dog.onpointercancel=function(){
   if(!drag)return;var g=drag;drag=null;
-  if(!g.moved){forward(g.u);return}
+  if(!g.moved){forward();return}
   var m=smax(g.u);
   if(g.d>D*.16)run(g.u,g.d,m,Math.max(260,520*(1-g.d/m)+260),function(){commit(pi+1)});
   else run(g.u,g.d,0,260,function(){commit(pi)})};
@@ -186,25 +201,22 @@ function poem(T){
 function story(T){
  return new Promise(function(done){
   var pages=T.pages||[],i=0;
-  var ov=el('<div class="ov fxov"><div class="stage sstage" dir="'+(T.dir||'ltr')+'"><div class="fpage spage"><div class="ptxt"></div><button class="pill primary pbtn" type="button"></button></div><img class="cn cn-tl" src="fx/corner1.webp" alt="" draggable="false"><img class="cn cn-br" src="fx/corner2.webp" alt="" draggable="false"><img class="sun" src="fx/sun.webp" alt="" draggable="false"><img class="mn" src="fx/moonface.webp" alt="" draggable="false"></div></div>');
+  var ov=el('<div class="ov fxov"><div class="stage sstage" dir="'+(T.dir||'ltr')+'"><div class="fpage spage"><div class="ptxt"></div><button class="pill primary pbtn" type="button"></button></div><img class="sun" src="fx/sun.webp" alt="" draggable="false"><img class="mn" src="fx/moonface.webp" alt="" draggable="false"></div></div>');
   document.body.appendChild(ov);
-  var st=ov.firstChild,page=st.querySelector('.spage'),box=st.querySelector('.ptxt'),b=st.querySelector('.pbtn'),tl=st.querySelector('.cn-tl'),br=st.querySelector('.cn-br'),sun=st.querySelector('.sun'),mn=st.querySelector('.mn');
+  var st=ov.firstChild,page=st.querySelector('.spage'),box=st.querySelector('.ptxt'),b=st.querySelector('.pbtn'),sun=st.querySelector('.sun'),mn=st.querySelector('.mn');
   var fold=function(){b.disabled=true;close(ov,st).then(done)};
   function render(){lines(box,pages[i]);b.textContent=i<pages.length-1?'Next':'Close'}
   if(T.paged)pagedLetter(st,page,b,T,fold);else render();
   A(ov,[{opacity:0},{opacity:0}],{duration:1});A(ov,[{opacity:0},{opacity:1}],{duration:300});
-  A(page,[{opacity:0,transform:'scale(.55)'},{opacity:0,transform:'scale(.55)'}],{duration:1});A(tl,[{opacity:0},{opacity:0}],{duration:1});A(br,[{opacity:0},{opacity:0}],{duration:1});
-  Promise.all([ready(sun),ready(mn),ready(tl),ready(br)]).then(function(){
+  A(page,[{opacity:0,transform:'scale(.55)'},{opacity:0,transform:'scale(.55)'}],{duration:1});
+  Promise.all([ready(sun),ready(mn)]).then(function(){
   var sc=center(st),cs=center(sun),cm=center(mn);
   var ds={x:sc.x-cs.x-34,y:sc.y-cs.y},dm={x:sc.x-cm.x+34,y:sc.y-cm.y};
   function pop(e,d,rot){return A(e,[{transform:'translate('+d.x+'px,'+d.y+'px) scale(0) rotate('+rot+'deg)',opacity:0},{transform:'translate('+d.x+'px,'+d.y+'px) scale(1.15) rotate(0)',opacity:1,offset:.65},{transform:'translate('+d.x+'px,'+d.y+'px) scale(1) rotate(0)',opacity:1}],{duration:650,easing:'ease-out'})}
-  /* sun and moon pop together, part diagonally, then the blossom corners open the page */
+  /* sun and moon pop together, part diagonally, then the page opens */
   Promise.all([pop(sun,ds,-30),pop(mn,dm,30)]).then(function(){return wait(320)}).then(function(){
    A(sun,[{transform:'translate('+ds.x+'px,'+ds.y+'px)'},{transform:'translate(0,0)'}],{duration:950,easing:'cubic-bezier(.35,1.2,.5,1)'});
    A(mn,[{transform:'translate('+dm.x+'px,'+dm.y+'px)'},{transform:'translate(0,0)'}],{duration:950,easing:'cubic-bezier(.35,1.2,.5,1)'});
-   var tc=center(tl),bc=center(br);
-   A(tl,[{opacity:0,transform:'translate('+(sc.x-tc.x)+'px,'+(sc.y-tc.y)+'px) scale(.3) rotate(-20deg)'},{opacity:1,transform:'none'}],{duration:1000,delay:260,easing:'cubic-bezier(.3,1,.4,1)'});
-   A(br,[{opacity:0,transform:'translate('+(sc.x-bc.x)+'px,'+(sc.y-bc.y)+'px) scale(.3) rotate(20deg)'},{opacity:1,transform:'none'}],{duration:1000,delay:260,easing:'cubic-bezier(.3,1,.4,1)'});
    A(page,[{opacity:0,transform:'scale(.55)'},{opacity:1,transform:'none'}],{duration:950,delay:260,easing:'cubic-bezier(.3,1,.4,1)'})})});
   if(!T.paged)b.onclick=function(){
    if(i<pages.length-1){i++;A(box,[{opacity:1},{opacity:0},{opacity:1}],{duration:380});setTimeout(render,190);return}
