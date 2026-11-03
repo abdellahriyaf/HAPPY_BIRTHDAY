@@ -124,28 +124,40 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 /* moon a bit further left, away from the cabinet */
 .moonbg{left:10%}
 
-/* Arabic poem on the scroll: Amiri for the verses, Aref Ruqaa for the title, one hemistich per line */
-.pstage.arp{width:min(82vw,380px)}
-.arp .stxt{left:13.5%;right:13.5%;top:14%;bottom:12%}
-.arp .sin{font:400 clamp(.92rem,4.1vw,1.12rem)/1.95 'Amiri','Scheherazade New','Traditional Arabic','Noto Naskh Arabic',serif;font-style:normal;width:100%}
-.arp .sin h3{font:700 clamp(1.5rem,7vw,1.9rem)/1.6 'Aref Ruqaa','Amiri',serif;color:var(--coral);margin:0 0 .35em}
-.arp .verse{margin:0 0 .7em}
-.arp .verse p{margin:0;text-wrap:balance}
-.arp .verse p:first-child{font-weight:700}
-.arp .vsep{margin:.5em 0 .9em;color:var(--rust);font-size:1rem;letter-spacing:.6em;text-indent:.6em;line-height:1}
+/* ===== Arabic poem: a taller scroll, facing half-lines, everything visible at once (font size is fitted in JS) ===== */
+.pstage.arp{--sw:min(93vw,430px);width:var(--sw);height:min(calc(100dvh - 118px),calc(var(--sw)*1.85))}
+.arp .scroll9{position:absolute;inset:0;width:100%;height:100%;box-sizing:border-box;border-style:solid;border-color:transparent;border-width:calc(var(--sw)*.1857) 0 calc(var(--sw)*.1786) 0;border-image:url(../fx/scroll.webp) 130 0 125 0 fill / calc(var(--sw)*.1857) 0 calc(var(--sw)*.1786) 0 stretch}
+.arp .scroll9::after{content:"";position:absolute;left:9.5%;right:9.5%;top:2%;bottom:2%;border-radius:22px;background:rgba(248,238,212,.74);box-shadow:0 0 12px 5px rgba(248,238,212,.74);pointer-events:none}
+.arp .stxt{left:12%;right:12%;top:calc(var(--sw)*.2);bottom:calc(var(--sw)*.19);overflow:hidden}
+.arp .sin{width:100%;margin:auto;font:400 15px/1.8 'Aref Ruqaa','Amiri','Scheherazade New','Traditional Arabic',serif;font-style:normal;color:#3d1d0a;text-align:start}
+.arp .sin h3{font:700 1.55em/1.5 'Aref Ruqaa','Amiri',serif;color:var(--coral);text-align:center;margin:0 0 .2em}
+.arp .verse{display:flex;justify-content:space-between;gap:.9em;margin:0 0 .22em}
+.arp .verse p{margin:0;flex:none;white-space:nowrap}
+.arp .vsep{text-align:center;color:var(--rust);font-size:.9em;line-height:1;margin:.2em 0 .5em;letter-spacing:.5em;text-indent:.5em}
+.arp .bunny{width:30%}
+.arp .b1{left:-8%;top:-7%}
+.arp .b2{right:-8%;bottom:-11%}
 
-/* Arabic letter: flip through pages (Back / Next), text split to fit the page */
-.lstage.arl{width:min(84vw,360px)}
-.arl .fpage{padding:26px 22px 14px}
-.arl .ptxt{font:400 1.14rem/32px 'Amiri','Scheherazade New','Traditional Arabic','Noto Naskh Arabic',serif;text-align:start;color:var(--ink);padding:0}
-.arl .ptxt p{margin:0 0 32px;text-wrap:pretty}
-.arl .ptxt p:last-child{margin-bottom:0}
-.lnav{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px;flex:none}
-.lnav .pbtn{margin-top:0}
-.lback{padding:7px 14px;font-size:.9rem}
-.lcount{min-width:42px;text-align:center;direction:ltr;font:800 .85rem var(--font-ui);color:var(--ink-soft)}
-
-.arl .fpage{padding-bottom:20px}
-.arl .lnav{margin-top:10px;margin-bottom:8px}
-
-.arl .ptxt{position:relative}
+/* ===== Arabic letter: aged paper, pages peel from the bottom-right corner ===== */
+.lstage.arl{width:min(88vw,380px)}
+.lpg{position:absolute;inset:0;z-index:2}
+.lpg .lshadow{position:absolute;inset:0;background:rgba(20,8,2,.6);filter:blur(9px);transform:translate(0,11px);pointer-events:none}
+.lpg .lstack{position:absolute;inset:0;overflow:hidden}
+.lpg .sheet{position:absolute;inset:0}
+.lpg .s-top{display:none;will-change:clip-path}
+.lpg .sheet .edge{position:absolute;inset:0;background:linear-gradient(135deg,#6b3f16,#9b6a33 50%,#6b3f16)}
+.lpg .sheet .paper{position:absolute;inset:0;background-color:#f1e0b4;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .1 0 0 0 .55 -.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(ellipse 45% 30% at 18% 14%,rgba(176,120,50,.24),transparent 70%),radial-gradient(ellipse 40% 28% at 84% 86%,rgba(140,88,36,.3),transparent 70%),radial-gradient(circle at 0 0,rgba(105,58,20,.5),transparent 90px),radial-gradient(circle at 100% 0,rgba(105,58,20,.4),transparent 80px),radial-gradient(circle at 0 100%,rgba(105,58,20,.4),transparent 80px),radial-gradient(circle at 100% 100%,rgba(105,58,20,.55),transparent 100px),repeating-linear-gradient(transparent 0 31px,rgba(110,59,29,.14) 31px 32px);box-shadow:inset 0 0 38px rgba(120,72,28,.5),inset 0 0 7px rgba(80,44,16,.45)}
+.lpg .sheet .ptxt{position:absolute;left:26px;right:26px;top:32px;bottom:92px;overflow:hidden;padding:0;font:400 1.1rem/32px 'Scheherazade New','Amiri','Traditional Arabic',serif;color:#3a1c0a;text-align:start}
+.lpg .sheet .ptxt p{margin:0 0 32px}
+.lpg .sheet .ptxt p:last-child{margin-bottom:0}
+.lpg .lshade{position:absolute;inset:0;display:none;pointer-events:none}
+.lpg .flap{position:absolute;inset:0;display:none;transform-origin:0 0;pointer-events:none;background-color:#e3cb96}
+.lpg .flap::before{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .1 0 0 0 .55 -.18'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.28}
+.lpg .lnav{position:absolute;left:0;right:0;bottom:26px;z-index:5;display:flex;align-items:center;justify-content:center;gap:12px}
+.lpg .lnav .pbtn{margin:0}
+.lpg .lback{padding:7px 14px;font-size:.9rem}
+.lpg .lcount{min-width:42px;text-align:center;direction:ltr;font:800 .85rem var(--font-ui);color:#6b4425}
+.lpg .dogear{position:absolute;right:0;bottom:0;width:86px;height:86px;z-index:6;touch-action:none;cursor:grab;-webkit-tap-highlight-color:transparent}
+.lpg .dogear i{position:absolute;right:4px;bottom:4px;width:38px;height:38px;background:linear-gradient(135deg,rgba(80,44,16,.4),transparent 55%),linear-gradient(315deg,transparent 50%,#ecd9a8 50%);box-shadow:-3px -3px 7px rgba(70,38,12,.4);transform-origin:100% 100%;animation:dogtap 2.8s ease-in-out infinite}
+@keyframes dogtap{0%,70%,100%{transform:scale(1)}82%{transform:scale(1.28)}92%{transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.lpg .dogear i{animation:none}}
