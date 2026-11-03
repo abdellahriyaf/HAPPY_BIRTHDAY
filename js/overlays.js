@@ -57,7 +57,7 @@ function pagedLetter(st,page,b,T,fold){
   pgs.push(cur)}
  /* second pass: spread the text evenly so the last page is not a few orphan lines */
  function setF(f){[uBox,tBox,fBox].forEach(function(x){x.style.fontSize=f+'px';x.style.lineHeight=Math.round(f*1.85)+'px'})}
- function fitAll(){var f;for(f=19;f>=10;f-=.5){setF(f);if(pgs.every(function(pg){fill(uBox,pg);return uBox.scrollHeight<=uBox.clientHeight+1}))break}}
+ function fitAll(){var f;for(f=18;f>=10;f-=.5){setF(f);if(pgs.every(function(pg){fill(uBox,pg);return uBox.scrollHeight<=uBox.clientHeight+1}))break}}
  function build(){
   if(T.three){pgs=T.paragraphs.filter(Boolean).map(function(p){return[p]});fitAll();return}
   cap=0;run1();var n=pgs.length;if(n<2)return;

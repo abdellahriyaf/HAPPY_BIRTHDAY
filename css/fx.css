@@ -177,3 +177,8 @@ body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;bac
 
 .lpg .lnav svg{display:block;width:1.3rem;height:1.3rem}
 .lpg .lnav .pill{display:inline-flex;align-items:center;justify-content:center}
+
+/* centered, book-like pages */
+.lpg .sheet .ptxt,.lpg .flap .ptxt{left:40px;right:40px;top:44px;bottom:98px;display:flex;flex-direction:column;justify-content:center;text-align:justify;text-align-last:center;hyphens:auto}
+.lpg .sheet .ptxt::before,.lpg .sheet .ptxt::after,.lpg .flap .ptxt::before,.lpg .flap .ptxt::after{content:"\2726  \2726  \2726";display:block;text-align:center;color:#a8672f;font-size:.7em;letter-spacing:.3em;line-height:2.4;opacity:.8;flex:none}
+.lpg .sheet .ptxt p,.lpg .flap .ptxt p{margin:0}
