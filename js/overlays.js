@@ -200,7 +200,7 @@ function poem(T){
 /* ---- story ---- */
 function story(T){
  return new Promise(function(done){
-  var pages=T.pages||[],i=0;
+  var pages=T.pages||[{title:T.title,lines:T.paragraphs}],i=0;
   var ov=el('<div class="ov fxov"><div class="stage sstage" dir="'+(T.dir||'ltr')+'"><div class="fpage spage"><div class="ptxt"></div><button class="pill primary pbtn" type="button"></button></div><img class="sun" src="fx/sun.webp" alt="" draggable="false"><img class="mn" src="fx/moonface.webp" alt="" draggable="false"></div></div>');
   document.body.appendChild(ov);
   var st=ov.firstChild,page=st.querySelector('.spage'),box=st.querySelector('.ptxt'),b=st.querySelector('.pbtn'),sun=st.querySelector('.sun'),mn=st.querySelector('.mn');
