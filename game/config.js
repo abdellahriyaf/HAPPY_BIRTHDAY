@@ -1,8 +1,8 @@
 /* Everything you can edit for the game. Keep your private text here only. */
 window.GAMECFG={
  clouds:19,
- loveAt:[4,9,15],                       /* clouds where "Do you love me?" appears */
- love:{q:'Do you love me?',yes:['Yes','Yes, always','Yes, obviously'],no:'No',dodge:['Nope.','Wrong button!','Try the other one.','Still no.']},
+ loveAt:[4,9,15],                       /* clouds where the love questions appear (one question each, in order) */
+ love:{q:['Do you love me?','Would you love me forever?','Would you love me if I was a bear?'],yes:['Yes','Yes, always','Yes, obviously'],no:'No',dodge:['Nope.','Wrong button!','Try the other one.','Still no.']},
  wordAt:12,                              /* cloud with the favourite-word question */
  word:{q:'What is my favourite word to hear you call me?',options:['Habibi','Baby','Hayati','My love'],answer:'Habibi',wrong:'Not that one, try again.',
   storyTitle:'Habibi',
